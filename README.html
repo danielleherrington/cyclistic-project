@@ -360,14 +360,30 @@ display: none;
 <h1>🚴‍♀️ Cyclistic Case Study</h1>
 <div id="project-overview" class="section level2">
 <h2>📊 <strong>Project Overview</strong></h2>
-<p>This case study analyses Cyclistic bike-share data to identify trends
-between casual riders and annual members using R.</p>
+<p>Cyclistic is a leading bike-share company based in Chicago, USA,
+offering a fleet of over 5,800 bikes and 600 stations across the city.
+The company provides a flexible, eco-friendly transportation option for
+both residents and tourists. Cyclistic’s user base is divided into two
+main groups: annual members, who typically use the service regularly for
+commuting, and casual riders, who use the bikes less frequently, often
+for recreational purposes.</p>
+<p>To boost long-term revenue and enhance user engagement, Cyclistic is
+looking to convert more casual riders into annual members. This project
+analyses historical ride data to uncover insights into the behavior and
+preferences of both user groups. The findings reveal key differences in
+how casual riders and annual members use the service. For instance,
+casual riders tend to use the bikes on weekends and during warmer
+months, often for longer, leisurely rides. On the other hand, annual
+members have more consistent usage patterns throughout the week, with
+shorter rides typically associated with daily commuting.</p>
+<p><em>Note: Due to the large size of the dataset, the data is not
+included in this repository. Instead, please refer to the
+data_instructions.md file for detailed instructions on how to obtain and
+prepare the data for analysis.</em></p>
 </div>
 <div id="project-structure" class="section level2">
 <h2>🗂️ <strong>Project Structure</strong></h2>
 <ol style="list-style-type: decimal">
-<li><strong><code>data/</code></strong>: Contains the datasets used for
-analysis.</li>
 <li><strong><code>scripts/</code></strong>: R scripts and R Markdown
 files for data cleaning and analysis.</li>
 <li><strong><code>visuals/</code></strong>: Plots and graphs generated
@@ -375,6 +391,8 @@ during the analysis.</li>
 <li><strong><code>reports/</code></strong>: Final case study report
 (PDF/HTML).</li>
 <li><strong><code>README.md</code></strong>: This file.</li>
+<li><strong><code>data_instructions.md</code></strong>: Instructions for
+downloading and preparing the data.</li>
 </ol>
 </div>
 <div id="tools-used" class="section level2">
@@ -399,20 +417,45 @@ for better visualisation (e.g., custom axis labels, formatting
 numbers).</li>
 </ul>
 </div>
-<div id="key-findings" class="section level2">
-<h2>📈 <strong>Key Findings</strong></h2>
-<ol style="list-style-type: decimal">
-<li><strong>Rider Behavior</strong>: Members tend to use bikes primarily
-for commuting, while casual riders prefer biking on weekends.</li>
-<li><strong>Seasonal Trends</strong>: There is an increase in bike usage
-during warmer months, particularly for casual riders.</li>
-<li><strong>Recommendations</strong>: Target casual riders with weekday
-promotions or discounts to convert them to members.</li>
-</ol>
+<div id="key-findings-recommendations" class="section level2">
+<h2>📈 <strong>Key Findings &amp; Recommendations</strong></h2>
+<div id="key-insights" class="section level3">
+<h3><strong>Key Insights</strong></h3>
+<ul>
+<li>Casual riders are more likely to use the service during weekends and
+peak summer months.</li>
+<li>Annual members display consistent usage patterns throughout the
+year, primarily for commuting during peak hours.</li>
+</ul>
+</div>
+<div id="recommendations-for-cyclistic" class="section level3">
+<h3><strong>Recommendations for Cyclistic</strong></h3>
+<p>Based on these findings, the report provides several strategies to
+increase annual memberships:</p>
+<ul>
+<li><p><strong>Seasonal Promotions</strong>: Offer time-limited
+discounts or membership trials during peak casual riding months (summer)
+to encourage conversion.</p></li>
+<li><p><strong>Targeted Marketing</strong>: Create weekend and holiday
+packages to appeal to casual riders, particularly tourists, and leverage
+geo-targeting near popular recreational areas to drive membership
+sign-ups.</p></li>
+<li><p><strong>Off-Peak Offers</strong>: Highlight the benefits of
+membership for non-commute hours and send personalized offers to
+frequent casual riders.</p></li>
+<li><p><strong>Leisure-Focused Incentives</strong>: Promote group
+membership packages and discounts at local attractions to attract casual
+riders looking for a more flexible and social way to use the
+service.</p></li>
+</ul>
+<p>By implementing these strategies, Cyclistic can increase its
+membership base, improve long-term customer loyalty, and strengthen its
+competitive position in the Chicago transportation market.</p>
+</div>
 </div>
 <div id="report" class="section level2">
 <h2>📄 <strong>Report</strong></h2>
-<p>View the full report <a href="reports/cyclistic_case_study_report.pdf">here</a>.</p>
+<p>View the full report <a href="reports/case_study.html">here</a>.</p>
 </div>
 <div id="author" class="section level2">
 <h2>👤 <strong>Author</strong></h2>
@@ -468,12 +511,3 @@ $(document).ready(function () {
 
 </body>
 </html>
-
-
-
-  ```bash
-   git add README.md
-   
-   git commit -m "Add generated README.md"
-   
-   git push origin main

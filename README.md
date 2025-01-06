@@ -52,7 +52,7 @@ By implementing these strategies, Cyclistic can increase its membership base, im
 
 ## 📄 **Report**
 
-View the full report [here](reports/cyclistic_case_study_report.pdf).
+View the full report [here](reports/case_study.html).
 
 ## 👤 **Author**
 
