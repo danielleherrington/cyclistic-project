@@ -1,0 +1,502 @@
+---
+title: "Cyclistic: How Does a Bike-Share Navigate Speedy Success?"
+subtitle: "Google Data Analytics Project"
+author: "Danielle Herrington"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    theme: lumen
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Executive Summary
+
+Cyclistic, a leading bike-share company in Chicago, USA, operates a network of over 5,800 bikes and 600 stations, offering residents and tourists a flexible, sustainable way to travel. Cyclistic’s ridership includes two main user groups: annual members, who tend to be regular commuters, and casual riders, who use the service less frequently. To increase long-term revenue and user engagement, Cyclistic aims to encourage more casual riders to convert to annual members.
+
+This report aims to provide Cyclistic with insights into the behaviours and preferences of its user base by analysing historical ride data. The analysis reveals notable differences between casual riders and members. For example, casual riders are more likely to use the service on weekends and during warmer months, often for longer, leisurely rides. In contrast, annual members demonstrate more frequent usage throughout the week, with shorter trip durations indicative of routine commuting.
+
+Based on these insights, the report outlines recommendations that focus on increasing membership through targeted promotions and strategic engagement initiatives. Suggestions include offering limited-time membership discounts for casual riders and creating weekend or holiday packages to appeal to tourists and occasional users. Cyclistic could also consider geo-targeting recreational hotspots with ads, QR codes, and signage to encourage immediate membership sign-ups. Additionally, highlighting off-peak benefits through timing-based offers, sending personalised savings reports to frequent riders, and promoting leisure-focused packages like group memberships and discounts at local attractions can further strengthen the appeal of annual membership and drive conversion.
+
+By implementing these strategies, Cyclistic has the potential to drive up membership rates and strengthen its position in Chicago’s competitive transportation market.
+
+
+# 2. Introduction
+
+Cyclistic is a bicycle hire system based in Chicago, USA, that enables users to borrow a bike from one docking station and return it to any other docking station in the system at any time. Since its launch in 2016, Cyclistic has expanded to a fleet of 5,824 bicycles that are geotracked and locked into a network of 692 docking stations across the city of Chicago. 
+
+Cyclistic’s user base is divided into two groups: casual riders, those who purchase single-ride or full-day passes, and annual members, those who purchase annual memberships which allows users to benefit from unlimited rides. This pricing strategy is designed to appeal to a diverse set of users by offering flexible options, catering to both casual riders and frequent users. 
+
+This capstone project, as part of the Google Data Analytics programme, seeks to analyse Cyclistic’s historical trip data to gain a deeper understanding of user behaviour, with a particular focus on identifying key differences between casual riders and annual members. By understanding these behavioural patterns—such as frequency of use, trip duration, preferred travel times, and popular routes—Cyclistic can gain insights into the needs and motivations of each user group.
+
+The primary goal is to leverage these insights to develop strategies aimed at converting casual riders into annual members, thus enhancing customer loyalty and increasing revenue. Maximising the number of annual members is pivotal for Cyclistic’s future growth and market positioning in Chicago’s transportation landscape.
+
+Through data analysis and visualisation, this report will address questions such as: What patterns distinguish casual riders from members? When, where, and how do these two groups use the service? The findings from this analysis will provide actionable recommendations that Cyclistic can implement to better serve its riders and promote membership growth.
+
+
+# 3. Data Collection and Preparation
+
+## A.	Description of Data
+
+For this report, Cyclistic's historical bike trip data will be analysed to uncover trends. This report makes use of data provided by Motivate International Inc. under this [licence](https://divvybikes.com/data-license-agreement) specifying usage rights and restrictions, located in a series of .CSV files made publicly available on the cloud storage platform Amazon Web Service (AWS). The AWS infrastructure provides a secure, remote backup that protects against data loss due to physical damage, theft, or localised incidents affecting the primary storage. 
+
+A total of 55 datasets are available, spanning from April 2020 to October 2024. Each dataset is in CSV (comma-separated values) format and includes detailed records of every ride taken by Cyclistic customers. For this project, however, only data from the most recent twelve months—November 2023 through October 2024—will be utilised. 12 .CSV files in total were downloaded and stored locally for the next steps in the process. The .CSV file format is a highly accessible data format due to its simplicity, compatibility, and ease of use.
+
+The data is organised by month, with each .CSV file containing trip data from a specific month from November 2023 to October 2024 in a consistent tabular format. Each row represents an individual trip, and each individual trip has a unique field that identifies it: ride_id. Each historical bike trip dataset file is anonymised with any personally identifiable information removed to protect user privacy and includes the following 13 variables: 
+
+-	"ride_id"  - the unique identifier for each trip
+
+-	"rideable_type" - type of bicycle used on each ride — classic, docked, or electric
+
+-"started_at"- start date and time of the trip         
+
+-	"ended_at" - end date and time of the trip   
+
+-	"start_station_name" - name of the station where each journey started from
+
+-	"start_station_id" - ID of the station where each journey started from
+
+-	"end_station_name"  - name of the station where each trip ended at
+
+-	"end_station_id"  - ID of the station where each journey ended at 
+
+-	"start_lat" - latitude of each starting station
+
+-	"start_lng" - longitude of each starting station
+
+-	"end_lat" - latitude of each ending station
+
+-	"end_lng" – longitude of each ending station
+
+-	"member_casual" - customer type, indicating whether the rider is a member or a casual user
+
+
+## B.	Credibility 
+
+Using the “ROCCC” framework (Reliable, Original, Comprehensive, Current, Cited), it can be determined that the data is reliable and credible: 
+
+**Reliable:** The bike ride data comes directly from Cyclistic’s operational data, which is generally reliable. However, the data has some missing values, duplicates and inconsistences which will need to be addressed before analysis. As such errors only represent a small proportion of the dataset, their impact on overall reliability is low.  
+
+**Original:** This is first-party data collected directly by Cyclistic, making it an original source, which enhances its credibility.
+
+**Comprehensive:** The dataset has more than 5 million complete data entries and includes a wide range of information (trip details, user types, station data), allowing for detailed analysis. 
+
+**Current:** Since bike-share data is updated frequently, the data is current. For this analysis we will be working with the most recent data to ensure relevance.
+
+**Cited:** As a primary dataset from Cyclistic, there may not be external citations. Documentation on data sources, data collection methods, and definitions is essential for transparency.
+
+
+## C. Methodology
+
+In this analysis, all data processing, analysis, and visualisation were conducted using R. The following R packages were utilised to streamline the workflow:
+
+**tidyverse:** A collection of packages used for data manipulation, exploration, and visualisation. Key packages from the tidyverse such as ggplot2 (for visualisation) and dplyr (for data manipulation) were extensively used.
+
+**janitor:** This package was used to clean the data, ensuring consistency and handling any missing or malformed data points.
+
+**lubridate:** Used for working with date and time data, making it easier to parse, manipulate, and perform calculations on date-related variables.
+
+**scales:** Used for scaling and formatting axis labels and other visual elements in the charts for better clarity and presentation
+
+## D. Data Preparation 
+
+### Data Cleaning
+
+The data cleaning process was a critical step in preparing the Cylistic data for analysis. The steps below outline the approach taken to ensure the data was accurate, consistent, and ready for transformation:
+
+**Initial Inspection**
+
+- Examined discrepancies in column names and data types (e.g., dbl, chr, date) across the 12 monthly data frames to ensure consistency before merging.
+
+**Combining Data Frames**
+
+- Merged the 12 monthly data frames into a single consolidated data frame for streamlined analysis.
+
+**Overview of Combined Data**
+
+- Used the glimpse() function to assess the structure and dimensions of the combined dataset, including column types and sample data.
+
+**Removing Empty Rows and Columns**
+
+- Identified and removed rows and columns containing only missing values to ensure the dataset was clean and complete.
+
+**Handling Duplicates**
+
+-	Inspected the ride_id column for duplicate entries, which serve as unique identifiers for each ride.
+-	Removed duplicate rows, keeping only the first occurrence of each entry.
+-	Verified the dataset to confirm no duplicates remained.
+
+**Validating Data Integrity**
+
+-	Checked the dimensions of the cleaned dataset to confirm the successful removal of unnecessary rows, columns, and duplicates.
+-	Validated the member_casual column to ensure it contained only the two expected categories: "casual" and "member."
+
+This cleaning process ensured that the dataset was reliable and ready for the transformation stage. For a detailed view of the code used, refer to the [accompanying documentation].
+
+
+### Data Transformation 
+
+The data transformation process was designed to refine the cleaned dataset into a structure optimised for analysis, ensuring that all necessary variables were properly formatted and ready for insights. Below are the key transformation steps undertaken:
+
+**1.	Converting started_at and ended_at to Date-Time Objects**
+The started_at and ended_at columns were converted into Date-Time objects in the YYYY-MM-DD HH:MM:SS format using the lubridate::ymd_hms() function. This standardised the date-time fields, enabling accurate time-based calculations and facilitating further manipulations. The data structure was then reviewed to confirm that these fields were successfully stored as POSIXct objects, ensuring compatibility with date-time operations.
+
+**2.	Creating Time-Derived Fields**
+To analyse ride patterns by time of day, the hour component (0–23) was extracted from the started_at and ended_at columns and stored in new fields, start_hour and end_hour. Additionally, date-only fields (start_date and end_date) were created by extracting the date component from the timestamps, allowing for day-level analysis of trends across calendar dates.
+
+**3.	Adding a day_of_week Column**
+A day_of_week column was added to capture the day of the week for each ride's start time (e.g., "Monday" or "Saturday"). This feature supports the analysis of weekday versus weekend usage patterns, highlighting how rider behaviour varies throughout the week.
+
+**4.	Calculating Ride Length**
+A new column, ride_length, was created by subtracting the started_at timestamp from ended_at, providing the ride duration in seconds. This field is essential for detailed analysis of trip durations and identifying anomalies, such as test rides or data errors.
+
+**5.	Identifying and Removing Anomalies**
+The dataset was inspected for negative ride lengths, which can indicate issues such as test data or recording errors. Rows with negative values in the ride_length column were filtered out, ensuring the integrity of the final dataset.
+
+**6.	Final Verification**
+The updated data structure was reviewed, and the first few rows of the transformed data were displayed to verify the successful addition of new columns and the removal of anomalies.
+
+These transformations ensured that the dataset was enriched with meaningful variables and prepared for effective analysis. The structured and cleaned data is now ready to reveal insights about Cyclistic's rider behaviours. To view the complete code for these transformations, [click here].
+
+
+# 4. Exploratory Data Analysis (EDA)
+
+### **Overview**
+
+The aim of the Exploratory Data Analysis (EDA) is to explore the dataset and extract meaningful patterns and insights, with a particular focus on the differences between casual riders and members. By analysing ride frequency, duration, and other relevant variables, we aim to understand customer behaviour across different times—by weekday, month, and hour—and identify usage trends for each customer type.
+
+For a breakdown of the code used to generate the visualisations in this report, [click here].
+
+### Key Findings
+
+#### A. Rides by Weekday
+
+![**Figure 1**](/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-case-study/visuals/Figure 1 - Rides by Weekday.jpeg)
+
+Figure 1 shows the total number of rides by day of the week for casual riders and members.
+
+##### Members:
+
+- Higher ride volume on weekdays, peaking on Wednesday with 630,152 rides.
+
+- Weekends show lower activity, reflecting a commuting pattern during weekdays.
+
+##### Casual Riders:
+
+- Activity peaks on weekends, especially Saturday (484,778 rides) and Sunday (416,522 rides).
+
+- Lower usage on weekdays, with Tuesday seeing the least activity at 232,180 rides.
+
+#### B. Rides by Month
+
+![**Figure 2**](/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-case-study/visuals/Figure 2 - Rides by Month.jpeg)
+
+Figure 2 compares the total number of rides by month for both groups.
+
+##### Seasonality:
+
+- Both groups show strong seasonal trends, with peak usage during the summer (July-September) and a drop in winter (December-February).
+
+- Members peak at around 450,000 rides in September, while casual riders peak at 350,000 in August.
+
+- Winter months (January) show the lowest activity for both groups, with casual riders showing the sharpest decline.
+
+#### C. Average Ride Duration by Customer Type
+
+![**Figure 3**](/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-case-study/visuals/Figure 3 - Average Ride Duration by Customer Type.jpeg)
+
+Figure 3 compares the average ride duration for casual riders and members.
+
+##### Casual Riders:
+
+- Ride durations average around 1,500 seconds (25 minutes), indicating recreational or leisure use.
+
+##### Members:
+
+- Average ride duration is around 800 seconds (13.3 minutes), suggesting shorter, more utilitarian rides.
+
+#### D. Hourly Ride Trends
+
+![**Figure 4**](/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-case-study/visuals/Figure 4 - Hourly Ride Trends.jpeg)
+
+Figure 4 illustrates ride frequency across different times of the day for both customer types.
+
+##### Members:
+
+Exhibit two peaks: one in the morning (7–9 AM) and one in the evening (5–6 PM), indicating strong commuting patterns.
+
+##### Casual Riders:
+
+- Show a gradual increase in rides throughout the morning, with a peak in the afternoon (around 5 PM).
+- They lack the strong morning peak observed in members.
+
+##### Off-Peak Trends:
+
+- Both groups show minimal activity during late-night hours (12 AM–5 AM), with casual users maintaining a low but steady ride count during off-peak hours.
+
+#### E. Day of the Week and Hourly Usage Heatmap
+
+![**Figure 5**](/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-case-study/visuals/Figure 5 - Day of the Week and Hourly Usage Heatmap.jpeg)
+
+Figure 5 shows a heatmap displaying ride frequency across days and hours.
+
+##### Members:
+
+- Concentrated during weekday work hours (8 AM–6 PM), suggesting commuting behaviour.
+
+##### Casual Riders:
+
+- More evenly spread throughout the week, without distinct hourly peaks, reflecting leisure-based usage.
+
+#### F. Top 5 Starting Stations
+
+![**Figure 6**](/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-case-study/visuals/Figure 6 - Top 5 Starting Stations.jpeg)
+-
+![**Figure 7**](/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-case-study/visuals/Figure 7 - Geographic Distribution of Top Starting Stations.jpeg)
+
+
+
+Figure 6 shows the most popular starting stations for casual riders and members, and Figure 7 maps their geographic distribution.
+
+##### Casual Riders (green markers on Figure 7):
+
+- Tend to start their trips at stations near recreational areas, such as parks or tourist hotspots.
+
+##### Members (blue markers on Figure 7):
+
+- More likely to begin their trips from stations located along commuting routes or near residential areas, with starting stations more evenly distributed across the downtown area and potentially in areas with a high density of offices. 
+
+# 5. Analysis
+
+In this section, we delve deeper into the behavioural patterns of casual riders and members. By analysing usage across different times of day, days of the week, months, and station preferences, we uncover insights that help explain the contrasting ways each group interacts with the service.
+
+#### A. Usage Patterns by Time of Day
+
+##### Peak Hours:
+
+**Casual Riders:**
+
+- The busiest period is in the afternoon (2–5 PM), likely due to recreational or leisure use.
+
+- Show lower activity during early mornings and evenings compared to members.
+
+**Members:**
+
+- Exhibit clear peaks during morning (8 AM) and evening (5–6 PM) rush hours, which are indicative of commuting behaviour.
+
+- There is a dip in usage during mid-day (10 AM–3 PM).
+
+**Low-Usage Hours:**
+
+- Both groups exhibit minimal activity during late-night hours (11 PM–5 AM).
+
+**Volume Comparison:**
+
+- Members consistently have higher trip counts throughout the day, particularly during peak commuting hours.
+
+- Casual users peak later in the day, but their overall ride volume is much lower.
+
+These time-of-day patterns highlight the differences in the intended use of the bikes: casual riders tend to use the service during more flexible times, while members exhibit a clear preference for commuting hours.
+
+#### B. Usage Patterns by Day of the Week
+
+**Casual Riders:**
+
+- Strongly prefer weekends for bike usage, with the highest number of rides on Saturday and Sunday. This suggests that casual riders use the service primarily for leisure or recreational activities.
+
+**Members:**
+
+- Ride activity is more consistent throughout the week, with slight drops during weekends. This indicates that members incorporate bike usage into their regular routines, often for commuting.
+
+These patterns reveal that casual riders view Cyclistic bikes as a tool for weekend fun, while members integrate them into their daily travel needs.
+
+#### C. Trip Duration Analysis
+
+**Casual Riders:**
+
+- Have longer ride durations, averaging between 1,500 and 1,700 seconds (25-28 minutes), indicating leisurely rides.
+
+- Their longest rides occur on weekends, particularly on Sunday, with an average duration of 1774.3 seconds (~29.6 minutes).
+
+**Members:**
+
+- Have much shorter ride durations, typically between 700 and 850 seconds (11.7 to 14.2 minutes), supporting the idea that they use bikes for commuting or short trips.
+
+This difference in ride duration highlights the recreational nature of casual riders versus the more practical, time-efficient usage by members.
+
+#### D. Usage Patterns by Month
+
+**Seasonal Trends:**
+
+- Members show steady usage throughout the year, with higher activity during warmer months (May to September).
+
+- Casual riders show more pronounced seasonality, with significant activity spikes during the summer months (June to September) and a sharp decline in winter.
+
+**Peak Season:**
+
+- For both groups, the highest number of rides occurs in the summer, with members peaking in August and casual riders following closely in July and August.
+
+- Winter months, especially December and January, show the lowest usage for both groups.
+
+These seasonal variations reflect the more predictable, year-round engagement of members, while casual riders’ engagement is heavily influenced by weather and seasonality.
+
+#### E. Station Preferences
+
+**Casual Riders:**
+
+Tend to start their trips near recreational areas such as parks and tourist hotspots, indicating that their rides are leisure-focused.
+
+**Members:**
+
+- More likely to start their rides in downtown or residential areas, which aligns with a commuter-focused usage pattern.
+
+
+# 6. Recommendations
+### Marketing Strategies to Convert Casual Riders into Annual Members
+
+To effectively convert casual riders into annual members, Cyclistic can use a variety of targeted marketing strategies. These strategies should highlight the benefits of membership, address casual riders' motivations, and make the transition as appealing and easy as possible. 
+
+**1. Tap into Seasonal Trends**
+
+***Insight:***
+
+Casual riders are most active during summer and afternoons.
+
+***Strategy:***
+
+- Summer Campaigns: Run promotional campaigns during the peak months (June–September) to convert high-usage casual riders into members. *For example:*
+
+*-	"Upgrade Now: Ride Unlimited All Summer Long!"*
+
+*-	Offer discounts on annual memberships during summer.*
+
+-	Membership Trial Pass: Provide a limited-time “membership trial” for frequent casual riders in the summer to showcase the benefits of being a member.
+
+
+**2. Leverage Timing of Usage**
+
+***Insight:***
+
+Casual riders primarily use bikes in the afternoons, whereas members use bikes during morning and evening commute hours.
+
+***Strategy:***
+
+- Promote membership benefits specifically for non-commute times:
+
+*-	"Ride Anytime: Membership Perks for Your Afternoon Adventures!"*
+
+- Highlight unlimited rides during off-peak hours (afternoons and weekends) to align with casual riders' habits.
+
+- Use targeted email or app notifications after casual rides in the afternoon, offering membership discounts:
+
+*- Example: "Enjoyed your afternoon ride? Become a member and ride anytime for one low cost."*
+
+
+**3. Tap Into Leisure and Convenience**
+
+***Insight:***
+
+Casual riders often ride for recreational purposes in the afternoon.
+
+***Strategy:***
+
+-	Group and Family Packages: Promote memberships for groups or families, as casual riders might often ride with others for leisure.
+
+- Weekend Membership Perks: Offer additional perks such as discounted or free guest passes for weekend rides, encouraging casual riders to subscribe.
+
+- Partner with local attractions: Offer discounts to attractions (e.g., museums or parks) for members to highlight recreational benefits.
+
+
+**4. Geo-Targeted Marketing**
+
+***Insight:***
+
+Casual riders often start their trips near recreational hotspots like the lakefront. 
+
+***Strategy:***
+
+-	Target marketing around these starting stations with:
+
+*- Digital signage promoting membership benefits.*
+
+*-	QR codes for instant sign-ups with first-month discounts.*
+
+*-	"Try Membership Now!" ads near recreational zones and parks.*
+
+
+**5. Emphasise Cost Savings for Frequent Riders**
+
+***Insight:***
+
+Members take significantly more trips than casual riders, making membership more cost-effective for frequent users.
+
+***Strategy:***
+
+- Send personalized "savings reports" to frequent casual riders, showing how much they would save with membership:
+
+*Example: "You’ve taken 10 rides this month. Save $X by switching to unlimited membership!"*
+
+- Use pricing comparisons:
+
+*Example: "A single ride costs $X, but membership gives you unlimited rides for just $Y/month—save more as you ride more!"*
+
+
+##### **Summary of Recommendations**
+
+**1. Seasonal Campaigns:** Promote summer membership discounts and trial passes to convert high-usage casual riders during peak months.
+
+**2. Timing-Based Offers:** Highlight off-peak benefits (afternoons, weekends) and send targeted discounts after afternoon rides.
+
+**3. Leisure Focus:** Offer group packages, weekend perks, and discounts at local attractions to appeal to recreational riders.
+
+**4. Geo-Targeting:** Use ads, QR codes, and signage at recreational hotspots like lakefront stations to promote memberships.
+
+**5.	Cost Savings:** Send personalised savings reports and use price comparisons to show frequent riders the financial benefits of membership.
+
+
+# 7. Conclusion
+
+This report analysed Cyclistic’s bike-share program to understand the distinct usage patterns of casual riders and annual members, with the goal of identifying strategies to convert casual users into loyal annual members. Key findings revealed that casual riders are more leisure-oriented, with longer rides, more activity during weekends and afternoons, and a preference for stations near recreational areas. In contrast, members display clear commuting patterns, with shorter rides, higher activity during weekdays, and a year-round commitment to the service. 
+
+The recommendations provided, such as seasonal campaigns, timing-based offers, leisure-focused perks, geo-targeted marketing, and cost-savings promotions, are strategically aligned with Cyclistic's growth and user conversion objectives. By addressing casual riders' unique preferences and riding patterns, these strategies can effectively showcase the benefits of membership and build long-term customer loyalty.
+
+To further refine these efforts, Cyclistic could consider additional research or data collection on:
+
+-	User Demographics: Insights into age, gender, and income levels of casual riders to tailor marketing messages more effectively.
+
+-	Trip Duration and Routes: Analysing popular trip lengths and routes for both user types to customise promotional offers.
+
+-	Feedback from Casual Riders: Conducting surveys to understand specific barriers to becoming members, such as pricing concerns or lack of awareness of benefits.
+
+These areas of further exploration could enhance future analyses, ensuring that Cyclistic continues to optimise its marketing strategies and deliver value to its expanding customer base.
+
+
+
+# 8. Appendices
+
+**Figure 1: Rides by Weekday**
+This bar chart compares the total number of rides by day of the week for casual riders and members. It highlights the key patterns in ride volume across weekdays and weekends, showing how members exhibit a stronger preference for weekday use, especially during the middle of the week, while casual riders favour weekends.
+
+**Figure 2: Rides by Month**
+This bar chart shows the total number of rides by month for both casual riders and members. It emphasises the seasonal nature of bike usage, with peaks in the summer months (July-September) and a notable decline during the winter months (December-February). Members show the highest peak in September, while casual riders peak in August.
+
+**Figure 3: Average Ride Duration by Customer Type**
+This bar chart compares the average ride duration for casual riders and members. Casual riders have longer average ride durations (about 25 minutes) compared to members, who typically take shorter, more utilitarian rides (around 13.3 minutes). The graph highlights the difference in trip lengths between leisure and commuting-focused usage.
+
+**Figure 4: Hourly Ride Trends**
+This line plot visualises ride frequency throughout the day for both casual riders and members. The chart shows distinct peaks in the morning and evening for members, reflecting typical commuting hours, while casual riders show a more even distribution of trips throughout the day with a peak in the late afternoon. This demonstrates the contrast between the commuting patterns of members and the more flexible ride times of casual riders.
+
+**Figure 5: Day of the Week and Hourly Usage Heatmap**
+This heatmap shows the frequency of rides across different days of the week and hours of the day. It illustrates the concentration of rides during weekdays for members (particularly in the mornings and evenings) and a more even spread throughout the week for casual riders, who do not display distinct peak times. The heatmap further emphasises the more routine usage of bikes by members compared to casual riders.
+
+**Figure 6: Top 5 Starting Stations**
+This bar chart displays the top 5 starting stations for each customer type. The data highlights the most popular starting points for casual riders and members. Casual riders tend to start their trips from stations near recreational areas, while members often begin their rides from locations closer to commuting routes.
+
+**Figure 7: Geographic Distribution of Top Starting Stations**
+This map shows the geographic distribution of the top starting stations for casual riders and members. It underscores the different areas frequented by each group: casual riders are concentrated around tourist and leisure locations, while members use stations closer to residential and business districts, indicating different usage patterns for each customer type.
+
+# 9. References
