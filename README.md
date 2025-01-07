@@ -2,9 +2,9 @@
 
 ### Analysing bike-share data using R
 
-## Introduction
+## 📖 **Introduction**
 
-The Cyclistic Case Study is part of the Google Analytics project, developed to analyse the data from the Cyclistic Bike-Share Programme. In this fictional scenario, we are working with a dataset of bike-sharing trips in Chicago, provided by Cyclistic, a fictional bike-share company, to determine the most effective ways to convert casual riders into members.
+The Cyclistic Case Study is part of the Google Analytics project, developed to analyse the data from the Cyclistic Bike-Share Programme. In this fictional scenario, a dataset of bike-sharing trips in Chicago, provided by Cyclistic, a fictional bike-share company, is used to determine the most effective ways to convert casual riders into members.
 
 ## 📊 **Project Overview**
 
@@ -60,7 +60,7 @@ By implementing these strategies, Cyclistic can increase its membership base, im
 
 View the full report [here](reports/case_study.html).
 
-## 📄 **License**
+## 📜 **License**
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
