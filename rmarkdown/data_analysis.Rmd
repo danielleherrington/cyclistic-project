@@ -1,0 +1,253 @@
+---
+title: "Data Analysis"
+author: "Danielle Herrington"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    theme: lumen
+---
+
+```{r setup, include=FALSE}
+# Set options for code chunks
+knitr::opts_chunk$set(
+  echo = TRUE,          
+  message = FALSE,      
+  warning = FALSE,      
+  fig.width = 6,        
+  fig.height = 4        
+)
+
+# Set a CRAN mirror
+options(repos = c(CRAN = "https://cran.rstudio.com"))
+
+# Install required packages (if not already installed)
+if (!requireNamespace("tidyverse", quietly = TRUE)) install.packages("tidyverse")
+if (!requireNamespace("janitor", quietly = TRUE)) install.packages("janitor")
+if (!requireNamespace("lubridate", quietly = TRUE)) install.packages("lubridate")
+if (!requireNamespace("scales", quietly = TRUE)) install.packages("scales")
+if (!requireNamespace("leaflet", quietly = TRUE)) install.packages("leaflet")
+
+
+# Load libraries
+library(tidyverse)
+library(janitor)
+library(lubridate)
+library(scales)
+library(leaflet)
+
+# Load the data
+bike_rides_cleaned <- read_csv("/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/bike_rides_cleaned.csv")
+```
+
+# Visualising the Number of Rides by Weekday and Customer Type
+```{r rides by weekday, echo=TRUE, message=FALSE, warning=FALSE}
+bike_rides_cleaned %>%
+  mutate(weekday = wday(started_at, label = TRUE)) %>%  # Extract the weekday from 'started_at'
+  group_by(member_casual, weekday) %>%
+  summarise(
+    number_of_rides = n(),  # Count the total number of rides
+    average_duration = mean(ride_length, na.rm = TRUE)  # Calculate the average ride duration
+  ) %>%
+  arrange(member_casual, weekday) %>%
+  ggplot(aes(
+    x = weekday,  # Weekday on the x-axis
+    y = number_of_rides,  # Total number of rides on the y-axis
+    fill = member_casual  # Customer type represented by color
+  )) +
+  geom_col(position = "dodge") +  # Create a grouped bar chart
+  geom_text(
+    aes(label = scales::comma(number_of_rides)),  # Annotate bars with ride counts
+    position = position_dodge(width = 0.9),  # Position the text above the bars
+    vjust = -0.5,  # Adjust text vertically
+    size = 3  # Set label size
+  ) +
+  labs(
+    title = "Total Number of Rides by Weekday and Customer Type",  # Title of the plot
+    x = "Day of the Week",  # Label for x-axis
+    y = "Total Number of Rides",  # Label for y-axis
+    fill = "Customer Type"  # Legend title for the fill color
+  ) +
+  scale_y_continuous(labels = scales::comma) +  # Format y-axis labels with commas
+  theme_minimal() +  # Apply a minimal theme for clean aesthetics
+  coord_flip()  # Flip coordinates for better readability
+```
+
+# Visualising the Number of Rides by Month and Customer Type
+```{r rides by month}
+bike_rides_cleaned %>%
+  mutate(month = month(started_at, label = TRUE, abbr = TRUE)) %>%
+  group_by(month, member_casual) %>%
+  summarise(total_trips = n(), .groups = 'drop') %>%
+  ggplot(aes(x = total_trips, y = month, fill = member_casual)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(label = scales::comma(total_trips)),
+            position = position_dodge(width = 0.9),
+            hjust = -0.1, size = 3) +
+  labs(
+    title = "Total Number of Rides by Month and Customer Type",
+    x = "Total Number of Rides",
+    y = "Month",
+    fill = "Customer Type"
+  ) +
+  theme_minimal() +
+  scale_x_continuous(labels = scales::comma)
+```
+
+# Calculating the Average Ride Length by Customer Type
+```{r avg ride length}
+avg_ride_length <- bike_rides_cleaned %>%
+  group_by(member_casual) %>%
+  summarise(average_duration = mean(ride_length, na.rm = TRUE)) 
+```
+
+# Visualising the Average Ride Length by Customer Type
+```{r visualising avg ride length}
+ggplot(avg_ride_length, aes(x = member_casual, y = average_duration, fill = member_casual)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +  # Use 'identity' to plot the summarised values
+  labs(
+    title = "Average Ride Length by Customer Type",
+    x = "Customer Type",
+    y = "Average Ride Duration (seconds)"
+  ) +
+  theme_minimal() +  # Clean theme for the plot
+  scale_y_continuous(labels = scales::comma)  # Format y-axis labels with commas for readability
+```
+
+
+# Hourly Ride Analysis
+```{r hourly ride analysis}
+
+# Step 1: Extract the hour from 'started_at' and create a new column for hour
+bike_rides_cleaned <- bike_rides_cleaned %>%
+  mutate(hour_of_day = hour(started_at))  # Extract hour of the day
+
+# Step 2: Group by hour of day and member type
+ride_summary_by_hour <- bike_rides_cleaned %>%
+  group_by(hour_of_day, member_casual) %>%
+  summarise(number_of_rides = n())  # Count of rides for each hour
+
+# Step 3: Plot the trip frequency by hour as a line graph
+ggplot(ride_summary_by_hour, aes(x = hour_of_day, y = number_of_rides, color = member_casual, group = member_casual)) +
+  geom_line(linewidth = 1) +  # Line graph
+  geom_point(size = 2) +  # Points on the lines for visibility
+  labs(
+    title = "Trip Frequency by Hour for Customer Types",
+    subtitle = "Number of trips by hour for casual members vs members",
+    x = "Hour of the Day",
+    y = "Number of Rides",
+    color = "Customer Type"
+  ) +
+  scale_x_continuous(breaks = 0:23) +  # Ensure every hour is represented on the x-axis
+  scale_y_continuous(labels = label_number(accuracy = 1)) + 
+  theme_minimal()
+```
+
+# Analysing Ride Frequency by Day and Hour with a Heatmap
+```{r ride heatmap analysis}
+
+# Step 1: Extract the day of the week and hour of the day
+bike_rides_cleaned <- bike_rides_cleaned %>%
+  mutate(
+    day_of_week = wday(started_at, label = TRUE, abbr = TRUE),  # Day of week (abbreviated names)
+    hour_of_day = hour(started_at)  # Hour of the day
+  )
+
+# Step 2: Group by member type, day of week, and hour of day
+ride_summary_heatmap <- bike_rides_cleaned %>%
+  group_by(member_casual, day_of_week, hour_of_day) %>%
+  summarise(ride_count = n()) %>%  # Count rides in each group
+  ungroup()
+
+# Step 3: Create the heatmap
+ggplot(ride_summary_heatmap, aes(x = hour_of_day, y = day_of_week, fill = ride_count)) +
+  geom_tile(color = "white") +
+  scale_fill_viridis_c(option = "C", name = "Ride Count") +  # Color scale for the ride frequency
+  facet_wrap(~ member_casual, ncol = 1) +  # Separate heatmaps for each rider type
+  labs(
+    title = "Ride Frequency by Day of the Week and Hour of the Day",
+    subtitle = "Comparing usage patterns for Casual Riders and Members",
+    x = "Hour of the Day",
+    y = "Day of the Week"
+  ) +
+  theme_minimal() +
+  theme(
+    strip.text = element_text(size = 12),  # Increase facet label size for clarity
+    axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate x-axis labels for readability
+  )
+```
+
+
+
+# Visualising Top 5 Starting Stations (Per Customer Type) 
+```{r top 5 starting stations}
+# Group by customer type and starting station, count trips, filter out empty stations
+top_starting_stations <- bike_rides_cleaned %>%
+  filter(!is.na(start_station_name) & start_station_name != "") %>%  # Filter out NAs and empty strings
+  group_by(member_casual, start_station_name) %>%  # Group by member type and start station
+  summarise(trip_count = n(), .groups = "drop") %>%  # Count the number of trips
+  arrange(desc(trip_count)) %>%  # Sort by trip count in descending order
+  group_by(member_casual) %>%  # Group by member type to ensure top 10 per type
+  top_n(5, trip_count) %>%  # Select top 5 starting stations per customer type
+  ungroup()  # Remove grouping for further processing
+
+
+# Plot the data with labels inside the bars
+ggplot(top_starting_stations, aes(x = reorder(start_station_name, trip_count), y = trip_count, fill = member_casual)) +
+  geom_bar(stat = "identity", position = "dodge") +  # Side-by-side bars for each member type
+  coord_flip() +  # Flip the chart for horizontal bars
+  labs(title = "Top 5 Starting Stations by Customer Type",
+       x = "Starting Station",
+       y = "Number of Rides",
+       fill = "Customer Type") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  # Rotate x-axis text
+  facet_wrap(~ member_casual) +  # Facet by customer type
+  geom_text(aes(label = trip_count), 
+            position = position_dodge(width = 0.8),  # Align text with bars
+            hjust = 1,  # Horizontally center the text inside the bars
+            size = 4)  # Adjust the text size
+
+```
+
+# Visualising Top 5 Starting Stations (Per Customer Type) on a Leaflet Map
+```{r top 5 starting stations leaflet map}
+install.packages("leaflet")
+library(leaflet)
+
+# Step 1: Calculate top starting stations without including coordinates in the grouping
+top_starting_stations <- bike_rides_cleaned %>%
+  filter(!is.na(start_station_name) & start_station_name != "") %>%
+  group_by(start_station_name, member_casual) %>%
+  summarise(number_of_rides = n(), .groups = "drop") %>%
+  arrange(desc(number_of_rides)) %>%
+  group_by(member_casual) %>%
+  slice_max(number_of_rides, n = 5)  # Select top 5 stations per customer type
+
+# Step 2: Merge coordinates with the top 5 stations using distinct coordinates for each station
+top_starting_stations_coords <- top_starting_stations %>%
+  left_join(
+    bike_rides_cleaned %>%
+      select(start_station_name, start_lat, start_lng) %>%
+      distinct(start_station_name, .keep_all = TRUE), # Ensure unique station coordinates
+    by = "start_station_name"
+  )
+
+# Step 3: Create the Leaflet map with coordinates now reattached
+leaflet(data = top_starting_stations_coords) %>%
+  addTiles() %>%
+  addCircleMarkers(
+    lng = ~start_lng, lat = ~start_lat,
+    radius = ~sqrt(number_of_rides) / 8,  # Adjust radius for visualisation
+    color = ~ifelse(member_casual == "member", "blue", "green"),  # Color by customer type
+    fill = TRUE, fillOpacity = 0.5,
+    popup = ~paste("Station:", start_station_name,
+                   "<br>Customer Type:", member_casual,
+                   "<br>Number of Rides:", number_of_rides)
+  ) %>%
+  addLegend(position = "bottomright", colors = c("blue", "green"),
+            labels = c("Member", "Casual"), title = "Customer Type") %>%
+  setView(lng = mean(top_starting_stations_coords$start_lng, na.rm = TRUE), 
+          lat = mean(top_starting_stations_coords$start_lat, na.rm = TRUE), zoom = 12)
+```

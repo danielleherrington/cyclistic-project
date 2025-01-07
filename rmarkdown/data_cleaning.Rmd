@@ -10,7 +10,17 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# Set options for code chunks
+knitr::opts_chunk$set(
+  echo = TRUE,          
+  message = FALSE,      
+  warning = FALSE,      
+  fig.width = 6,        
+  fig.height = 4        
+)
+
+# Set a CRAN mirror
+options(repos = c(CRAN = "https://cran.rstudio.com"))
 ```
 
 # Data Cleaning
@@ -21,10 +31,7 @@ The data cleaning process for the Cyclistic bike-share data involved a series of
 
 The first step was to install and load the necessary R packages for data cleaning and manipulation.
 
-```{r install-load-packages, echo=TRUE}
-# Set the CRAN mirror
-options(repos = c(CRAN = "https://cran.rstudio.com/"))
-
+```{r install and load packages}
 # Install necessary packages
 install.packages("tidyverse")
 install.packages("janitor")
@@ -42,27 +49,27 @@ library(scales)     # useful for customising the appearance of visualisations
 
 The next step involved importing 12 months of raw datasets into R for analysis using the read.csv() function, which ensured proper handling of file paths and delimiters.
 
-```{r load-monthly-data, echo=TRUE}
+```{r load monthly data}
 # Import last 12 months of data
-nov23 <- read.csv("~/Documents/Cyclistic/Data/202311-divvy-tripdata.csv")
-dec23 <- read.csv("~/Documents/Cyclistic/Data/202312-divvy-tripdata.csv")
-jan24 <- read.csv("~/Documents/Cyclistic/Data/202401-divvy-tripdata.csv")
-feb24 <- read.csv("~/Documents/Cyclistic/Data/202402-divvy-tripdata.csv")
-mar24 <- read.csv("~/Documents/Cyclistic/Data/202403-divvy-tripdata.csv")
-apr24 <- read.csv("~/Documents/Cyclistic/Data/202404-divvy-tripdata.csv")
-may24 <- read.csv("~/Documents/Cyclistic/Data/202405-divvy-tripdata.csv")
-jun24 <- read.csv("~/Documents/Cyclistic/Data/202406-divvy-tripdata.csv")
-jul24 <- read.csv("~/Documents/Cyclistic/Data/202407-divvy-tripdata.csv")
-aug24 <- read.csv("~/Documents/Cyclistic/Data/202408-divvy-tripdata.csv")
-sep24 <- read.csv("~/Documents/Cyclistic/Data/202409-divvy-tripdata.csv")
-oct24 <- read.csv("~/Documents/Cyclistic/Data/202410-divvy-tripdata.csv")
+nov23 <- read.csv("~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202311-divvy-tripdata.csv")
+dec23 <- read.csv("~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202312-divvy-tripdata.csv")
+jan24 <- read.csv("~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202401-divvy-tripdata.csv")
+feb24 <- read.csv("~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202402-divvy-tripdata.csv")
+mar24 <- read.csv("~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202403-divvy-tripdata.csv")
+apr24 <- read.csv("~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202404-divvy-tripdata.csv")
+may24 <- read.csv("~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202405-divvy-tripdata.csv")
+jun24 <- read.csv("~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202406-divvy-tripdata.csv")
+jul24 <- read.csv("~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202407-divvy-tripdata.csv")
+aug24 <- read.csv("~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202408-divvy-tripdata.csv")
+sep24 <- read.csv("~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202409-divvy-tripdata.csv")
+oct24 <- read.csv("~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202410-divvy-tripdata.csv")
 ```
 
 ## 3.	Inspect the data
 
 An inspection was done to check for discrepancies in column names and data types (e.g., dbl, chr, date) for each individual data frame before combining them into one.
 
-```{r display-column-names-and-data-structures, echo=TRUE}
+```{r display column names and data structures}
 # Display column names of each data frame to verify that the column names match
 colnames(nov23)
 colnames(dec23)
@@ -95,15 +102,18 @@ str(oct24)
 ## 4.	Combine into one data frame
 After verifying that column names and data types were consistent across all data frames, the 12 monthly data frames were combined into one consolidated data frame.
 
-```{r combine-data, echo=TRUE}
+```{r combine data}
 # Combine 12 data frames into one data frame
 bike_rides <- rbind(nov23,dec23,jan24,feb24,mar24,apr24,may24,jun24,jul24,aug24,sep24,oct24)
+
+# Save the combined dataframe as a CSV file
+write.csv(bike_rides, "/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/bike_rides.csv", row.names = FALSE)
 ```
 
 ## 5.	Initial inspection of the combined data frame
 The glimpse() function was used for a quick overview of the combined data structure and size.
 
-```{r view-structure, echo=TRUE}
+```{r view structure}
 # View structure of the data
 glimpse(bike_rides)
 ```
@@ -111,7 +121,7 @@ glimpse(bike_rides)
 ## 6.	Remove empty rows and columns
 Rows or columns containing only missing values were removed to ensure a cleaner dataset and avoid errors during analysis.
 
-```{r remove-empties, echo=TRUE}
+```{r remove empties}
 # Remove any blank columns
 bike_rides <- janitor::remove_empty(bike_rides,which = c("cols"))
 
@@ -122,7 +132,7 @@ bike_rides <- janitor::remove_empty(bike_rides,which = c("rows"))
 ## 7.	Check for duplicates in ride_id
 The next step was to check for any duplicate entries in the ride_id column, which should serve as a unique identifier for each ride.
 
-```{r duplicated_ride_id, echo=TRUE}
+```{r duplicated ride_id}
 # Check if there any duplicated values in the ride_id column
 sum(duplicated(bike_rides$ride_id))
 
@@ -132,7 +142,7 @@ sum(duplicated(bike_rides$ride_id))
 ## 8.	Remove duplicates
 Duplicate rows based on ride_id were removed, keeping only the first occurrence of each duplicate.
 
-```{r remove_duplicates_ride_id, echo=TRUE}
+```{r remove duplicates ride_id}
 # Remove duplicates based on ride_id
 bike_rides <- bike_rides %>%
   distinct(ride_id, .keep_all = TRUE)
@@ -141,7 +151,7 @@ bike_rides <- bike_rides %>%
 ## 9.	Verify that duplicates have been removed
 A verification was performed to ensure that no duplicates remained in the dataset.
 
-```{r verify_removal_duplicates_ride_id, echo=TRUE}
+```{r verify removal of duplicates ride_id}
 # Check if any duplicates remain
 sum(duplicated(bike_rides$ride_id))
 ```
@@ -149,7 +159,7 @@ sum(duplicated(bike_rides$ride_id))
 ## 10.	Verify the dimensions of the cleaned dataset
 The dimensions (number of rows and columns) of the cleaned dataset were checked to confirm the changes made after removing empty rows, columns, and duplicates.
 
-```{r verify_dimensions, echo=TRUE}
+```{r verify dimensions}
 # Check the dimensions of the dataset after removing duplicates
 dim(bike_rides)  # Returns the updated number of rows and columns
 ```
@@ -157,7 +167,7 @@ dim(bike_rides)  # Returns the updated number of rows and columns
 ## 11.	Count distinct values in member_casual
 The presence of only two distinct categories (casual and member) in the member_casual column was confirmed.
 
-```{r count_distinct_member_casual, echo=TRUE}
+```{r count distinct member_casual}
 # Count the distinct values in the member_casual column
 n_distinct(bike_rides$member_casual) 
 # The result is 2. This indicates that there are two distinct categories: "casual" and "member". Since n_distinct() shows only two categories, and these are the expected values (e.g., "casual" and "member"), we don’t need to make any corrections

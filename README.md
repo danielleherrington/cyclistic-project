@@ -1,7 +1,6 @@
-# cyclistic-case-study
-Cyclistic Case Study: Analysing bike-share data using R
-
 # 🚴‍♀️ Cyclistic Case Study
+
+Analysing bike-share data using R
 
 ## 📊 **Project Overview**
 
@@ -13,12 +12,11 @@ To boost long-term revenue and enhance user engagement, Cyclistic is looking to 
 
 ## 🗂️ **Project Structure**
 
-1. **`scripts/`**: R scripts and R Markdown files for data cleaning and analysis.
-2. **`visuals/`**: Plots and graphs generated during the analysis.
-3. **`reports/`**: Final case study report (PDF/HTML).
-4. **`README.md`**: This file.
-5. **`data_instructions.md`**: Instructions for downloading and preparing the data.
-
+- [rmarkdown/](./rmarkdown): R Markdown files for data cleaning, transformation and analysis.
+- [visuals/](./visuals): Plots and graphs generated during the analysis.
+- [reports/](./reports): Final case study report (HTML).
+- [README.md](./README.md): This file.
+- [data_instructions.md](./data_instructions.md): Instructions for downloading and preparing the data.
 
 ## 🔧 **Tools Used**
 
@@ -29,6 +27,7 @@ This project utilises the following tools and R packages for data analysis and v
 - **janitor**: Provides easy-to-use functions for cleaning data and improving data quality, particularly for handling column names and cleaning.
 - **lubridate**: A package for working with dates and times, simplifying date manipulation.
 - **scales**: A package for scaling and formatting data for better visualisation (e.g., custom axis labels, formatting numbers).
+- **leaflet**: A package for creating interactive maps, which is particularly useful for visualising geographic data.
 
 
 ## 📈 **Key Findings & Recommendations**
@@ -44,7 +43,7 @@ Based on these findings, the report provides several strategies to increase annu
 
 - **Targeted Marketing**: Create weekend and holiday packages to appeal to casual riders, particularly tourists, and leverage geo-targeting near popular recreational areas to drive membership sign-ups.
 
-- **Off-Peak Offers**: Highlight the benefits of membership for non-commute hours and send personalized offers to frequent casual riders.
+- **Off-Peak Offers**: Highlight the benefits of membership for non-commute hours and send personalised offers to frequent casual riders.
 
 - **Leisure-Focused Incentives**: Promote group membership packages and discounts at local attractions to attract casual riders looking for a more flexible and social way to use the service.
 
@@ -56,4 +55,4 @@ View the full report [here](reports/case_study.html).
 
 ## 👤 **Author**
 
-Danielle Herrington – [LinkedIn](https://www.linkedin.com/in/danielle-herrington-b6412a30a/) | [Portfolio](your-portfolio-url)
+Danielle Herrington – [LinkedIn](https://www.linkedin.com/in/danielle-herrington-b6412a30a/)

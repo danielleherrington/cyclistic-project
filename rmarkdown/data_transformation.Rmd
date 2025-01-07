@@ -10,7 +10,32 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# Set options for code chunks
+knitr::opts_chunk$set(
+  echo = TRUE,          
+  message = FALSE,      
+  warning = FALSE,      
+  fig.width = 6,        
+  fig.height = 4        
+)
+
+# Set a CRAN mirror
+options(repos = c(CRAN = "https://cran.rstudio.com"))
+
+# Install required packages (if not already installed)
+if (!requireNamespace("tidyverse", quietly = TRUE)) install.packages("tidyverse")
+if (!requireNamespace("janitor", quietly = TRUE)) install.packages("janitor")
+if (!requireNamespace("lubridate", quietly = TRUE)) install.packages("lubridate")
+if (!requireNamespace("scales", quietly = TRUE)) install.packages("scales")
+
+# Load libraries
+library(tidyverse)
+library(janitor)
+library(lubridate)
+library(scales)
+
+# Load the data
+bike_rides <- read_csv("/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/bike_rides.csv")
 ```
 
 # Data Transformation
@@ -19,7 +44,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The started_at and ended_at columns were converted to Date-Time objects in YYYY-MM-DD HH:MM:SS format using the lubridate::ymd_hms() function. This ensures that the date-time fields are stored in a format that supports time-based calculations and manipulations.
 
-```{r convert to date-time objects, echo=TRUE}
+```{r convert to date-time objects}
 bike_rides$started_at <- lubridate::ymd_hms(bike_rides$started_at) #turns 'started_at' to ymd_hms
 bike_rides$ended_at <- lubridate::ymd_hms(bike_rides$ended_at) #turns 'ended_at' to ymd_hms
 ```
@@ -28,14 +53,14 @@ bike_rides$ended_at <- lubridate::ymd_hms(bike_rides$ended_at) #turns 'ended_at'
 The started_at and ended_at fields were confirmed to have been successfully converted to POSIXct date-time objects.
 
 
-```{r view updated data structure, echo=TRUE}
+```{r view updated data structure}
 str(bike_rides)
 ```
 
 ## 3.	Create Hour Fields (start_hour and end_hour)
 The hour component (0–23) was extracted from the started_at and ended_at columns and stored in new fields (start_hour and end_hour). This enables analysis of ride patterns by time of day, such as identifying peak usage hours.
 
-```{r view updated data structure, echo=TRUE}
+```{r create hour fields}
 bike_rides$start_hour <- lubridate::hour(bike_rides$started_at) #creates field for 'start hour'
 bike_rides$end_hour <- lubridate::hour(bike_rides$ended_at) #creates field for 'end hour'
 ```
@@ -43,7 +68,7 @@ bike_rides$end_hour <- lubridate::hour(bike_rides$ended_at) #creates field for '
 ## 4.	Create Date-Only Fields (start_date and end_date)
 The date (without the time component) was extracted from started_at and ended_at, storing them in new columns. This allows for day-level analysis, such as tracking usage trends over calendar dates.
 
-```{r create date-only fields, echo=TRUE}
+```{r create date-only fields}
 bike_rides$start_date <- as.Date(bike_rides$started_at) #creates field for 'start date'
 bike_rides$end_date <- as.Date(bike_rides$ended_at) #creates field for 'end date'
 ```
@@ -52,7 +77,7 @@ bike_rides$end_date <- as.Date(bike_rides$ended_at) #creates field for 'end date
 ## 5.	Add a day_of_week Column
 A new column (day_of_week) was created to indicate the day of the week (e.g., "Sunday," "Monday") for each ride's start time. This is useful for understanding weekday vs. weekend usage patterns.
 
-```{r create day_of_week column, echo=TRUE}
+```{r create day_of_week column}
 bike_rides <- bike_rides %>%
   mutate(day_of_week = wday(started_at, label = TRUE, abbr = FALSE))
 ```
@@ -60,21 +85,21 @@ bike_rides <- bike_rides %>%
 ## 6.	Create a ride_length Column
 Ride duration in seconds was calculated by subtracting started_at from ended_at and storing it as a numeric column (ride_length). This allows for detailed analysis of ride durations and helps identify anomalies, such as negative values.
 
-```{r create ride_length column, echo=TRUE}
+```{r create ride_length column}
 bike_rides$ride_length <- as.numeric(difftime(bike_rides$ended_at, bike_rides$started_at, units = "secs"))  # Difference in seconds
 ```
 
 ## 7.	Verify the New Columns
 The first few rows of the data frame were displayed to confirm that the new columns were added correctly.
 
-```{r verify new columns, echo=TRUE}
+```{r verify new columns}
 head(bike_rides)
 ```
 
 ## 8.	Count Negative Ride Lengths
 The number of rides with negative durations (where ride_length is less than 0) was counted and the result printed. Negative ride lengths indicate data issues, such as test rides or errors.
 
-```{r count negative ride lengths, echo=TRUE}
+```{r count negative ride lengths}
 negative_ride_lengths_count <- sum(bike_rides$ride_length < 0, na.rm = TRUE)
 
 print(negative_ride_lengths_count) #Displays the result of negative ride lengths. The data frame includes 258 entries when bikes were taken out of docks and checked for quality by Divvy or ride_length was negative
@@ -83,7 +108,7 @@ print(negative_ride_lengths_count) #Displays the result of negative ride lengths
 ## 9.	Remove Rows with Negative Ride Lengths
 Rows where ride_length is less than 0 were filtered out, creating a new cleaned dataset (bike_rides_cleaned). This ensures that the data is accurate and representative of real rides.
 
-```{r remove rows with negative ride lengths, echo=TRUE}
+```{r remove rows with negative ride lengths}
 bike_rides_cleaned <- bike_rides %>%
   filter(ride_length >= 0)
 ```
@@ -91,7 +116,7 @@ bike_rides_cleaned <- bike_rides %>%
 ## 10.	Verify the Cleaned Data
 The first few rows of the cleaned data were displayed to verify that negative ride lengths had been removed.
 
-```{r verify cleaned data, echo=TRUE}
+```{r verify cleaned data}
 head(bike_rides_cleaned)
 ```
 

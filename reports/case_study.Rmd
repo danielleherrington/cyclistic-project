@@ -11,7 +11,35 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# Set options for code chunks
+knitr::opts_chunk$set(
+  echo = TRUE,          
+  message = FALSE,      
+  warning = FALSE,      
+  fig.width = 6,        
+  fig.height = 4        
+)
+
+# Set a CRAN mirror
+options(repos = c(CRAN = "https://cran.rstudio.com"))
+
+# Install required packages (if not already installed)
+if (!requireNamespace("tidyverse", quietly = TRUE)) install.packages("tidyverse")
+if (!requireNamespace("janitor", quietly = TRUE)) install.packages("janitor")
+if (!requireNamespace("lubridate", quietly = TRUE)) install.packages("lubridate")
+if (!requireNamespace("scales", quietly = TRUE)) install.packages("scales")
+if (!requireNamespace("leaflet", quietly = TRUE)) install.packages("leaflet")
+
+
+# Load libraries
+library(tidyverse)
+library(janitor)
+library(lubridate)
+library(scales)
+library(leaflet)
+
+# Load the data
+bike_rides_cleaned <- read_csv("/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/bike_rides_cleaned.csv")
 ```
 
 # 1. Executive Summary
@@ -52,7 +80,7 @@ The data is organised by month, with each .CSV file containing trip data from a 
 
 -	"rideable_type" - type of bicycle used on each ride — classic, docked, or electric
 
--"started_at"- start date and time of the trip         
+- "started_at"- start date and time of the trip         
 
 -	"ended_at" - end date and time of the trip   
 
@@ -101,6 +129,8 @@ In this analysis, all data processing, analysis, and visualisation were conducte
 **lubridate:** Used for working with date and time data, making it easier to parse, manipulate, and perform calculations on date-related variables.
 
 **scales:** Used for scaling and formatting axis labels and other visual elements in the charts for better clarity and presentation
+
+**leaflet:** Used for creating interactive maps, useful for visualising geographic data.
 
 ## D. Data Preparation 
 
@@ -169,13 +199,13 @@ These transformations ensured that the dataset was enriched with meaningful vari
 
 The aim of the Exploratory Data Analysis (EDA) is to explore the dataset and extract meaningful patterns and insights, with a particular focus on the differences between casual riders and members. By analysing ride frequency, duration, and other relevant variables, we aim to understand customer behaviour across different times—by weekday, month, and hour—and identify usage trends for each customer type.
 
-For a breakdown of the code used to generate the visualisations in this report, [click here].
+For visualisations referenced throughout the analysis, please refer to the **Appendices** for all figures.
+
+For a breakdown of the code used to generate the visualisations in this report, [click here](rmarkdown/data_analysis.html).
 
 ### Key Findings
 
 #### A. Rides by Weekday
-
-![**Figure 1**](/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-case-study/visuals/Figure 1 - Rides by Weekday.jpeg)
 
 Figure 1 shows the total number of rides by day of the week for casual riders and members.
 
@@ -193,8 +223,6 @@ Figure 1 shows the total number of rides by day of the week for casual riders an
 
 #### B. Rides by Month
 
-![**Figure 2**](/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-case-study/visuals/Figure 2 - Rides by Month.jpeg)
-
 Figure 2 compares the total number of rides by month for both groups.
 
 ##### Seasonality:
@@ -207,8 +235,6 @@ Figure 2 compares the total number of rides by month for both groups.
 
 #### C. Average Ride Duration by Customer Type
 
-![**Figure 3**](/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-case-study/visuals/Figure 3 - Average Ride Duration by Customer Type.jpeg)
-
 Figure 3 compares the average ride duration for casual riders and members.
 
 ##### Casual Riders:
@@ -220,8 +246,6 @@ Figure 3 compares the average ride duration for casual riders and members.
 - Average ride duration is around 800 seconds (13.3 minutes), suggesting shorter, more utilitarian rides.
 
 #### D. Hourly Ride Trends
-
-![**Figure 4**](/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-case-study/visuals/Figure 4 - Hourly Ride Trends.jpeg)
 
 Figure 4 illustrates ride frequency across different times of the day for both customer types.
 
@@ -240,8 +264,6 @@ Exhibit two peaks: one in the morning (7–9 AM) and one in the evening (5–6 P
 
 #### E. Day of the Week and Hourly Usage Heatmap
 
-![**Figure 5**](/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-case-study/visuals/Figure 5 - Day of the Week and Hourly Usage Heatmap.jpeg)
-
 Figure 5 shows a heatmap displaying ride frequency across days and hours.
 
 ##### Members:
@@ -253,12 +275,6 @@ Figure 5 shows a heatmap displaying ride frequency across days and hours.
 - More evenly spread throughout the week, without distinct hourly peaks, reflecting leisure-based usage.
 
 #### F. Top 5 Starting Stations
-
-![**Figure 6**](/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-case-study/visuals/Figure 6 - Top 5 Starting Stations.jpeg)
--
-![**Figure 7**](/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-case-study/visuals/Figure 7 - Geographic Distribution of Top Starting Stations.jpeg)
-
-
 
 Figure 6 shows the most popular starting stations for casual riders and members, and Figure 7 maps their geographic distribution.
 
@@ -460,7 +476,7 @@ Members take significantly more trips than casual riders, making membership more
 
 # 7. Conclusion
 
-This report analysed Cyclistic’s bike-share program to understand the distinct usage patterns of casual riders and annual members, with the goal of identifying strategies to convert casual users into loyal annual members. Key findings revealed that casual riders are more leisure-oriented, with longer rides, more activity during weekends and afternoons, and a preference for stations near recreational areas. In contrast, members display clear commuting patterns, with shorter rides, higher activity during weekdays, and a year-round commitment to the service. 
+This report analysed Cyclistic’s bike-share programme to understand the distinct usage patterns of casual riders and annual members, with the goal of identifying strategies to convert casual users into loyal annual members. Key findings revealed that casual riders are more leisure-oriented, with longer rides, more activity during weekends and afternoons, and a preference for stations near recreational areas. In contrast, members display clear commuting patterns, with shorter rides, higher activity during weekdays, and a year-round commitment to the service. 
 
 The recommendations provided, such as seasonal campaigns, timing-based offers, leisure-focused perks, geo-targeted marketing, and cost-savings promotions, are strategically aligned with Cyclistic's growth and user conversion objectives. By addressing casual riders' unique preferences and riding patterns, these strategies can effectively showcase the benefits of membership and build long-term customer loyalty.
 
@@ -481,22 +497,228 @@ These areas of further exploration could enhance future analyses, ensuring that 
 **Figure 1: Rides by Weekday**
 This bar chart compares the total number of rides by day of the week for casual riders and members. It highlights the key patterns in ride volume across weekdays and weekends, showing how members exhibit a stronger preference for weekday use, especially during the middle of the week, while casual riders favour weekends.
 
+```{r figure 1, echo=FALSE, fig.cap = "Rides by Weekday", message=FALSE, warning=FALSE}
+bike_rides_cleaned %>%
+  mutate(weekday = wday(started_at, label = TRUE)) %>%  # Extract the weekday from 'started_at'
+  group_by(member_casual, weekday) %>%
+  summarise(
+    number_of_rides = n(),  # Count the total number of rides
+    average_duration = mean(ride_length, na.rm = TRUE)  # Calculate the average ride duration
+  ) %>%
+  arrange(member_casual, weekday) %>%
+  ggplot(aes(
+    x = weekday,  # Weekday on the x-axis
+    y = number_of_rides,  # Total number of rides on the y-axis
+    fill = member_casual  # Customer type represented by color
+  )) +
+  geom_col(position = "dodge") +  # Create a grouped bar chart
+  geom_text(
+    aes(label = scales::comma(number_of_rides)),  # Annotate bars with ride counts
+    position = position_dodge(width = 0.9),  # Position the text above the bars
+    vjust = -0.5,  # Adjust text vertically
+    size = 3  # Set label size
+  ) +
+  labs(
+    title = "Total Number of Rides by Weekday and Customer Type",  # Title of the plot
+    x = "Day of the Week",  # Label for x-axis
+    y = "Total Number of Rides",  # Label for y-axis
+    fill = "Customer Type"  # Legend title for the fill color
+  ) +
+  scale_y_continuous(labels = scales::comma) +  # Format y-axis labels with commas
+  theme_minimal() +  # Apply a minimal theme for clean aesthetics
+  coord_flip()  # Flip coordinates for better readability
+```
+
 **Figure 2: Rides by Month**
 This bar chart shows the total number of rides by month for both casual riders and members. It emphasises the seasonal nature of bike usage, with peaks in the summer months (July-September) and a notable decline during the winter months (December-February). Members show the highest peak in September, while casual riders peak in August.
+
+```{r figure 2, echo=FALSE, fig.cap = "Rides by Month", message=FALSE, warning=FALSE}
+bike_rides_cleaned %>%
+  mutate(month = month(started_at, label = TRUE, abbr = TRUE)) %>%
+  group_by(month, member_casual) %>%
+  summarise(total_trips = n(), .groups = 'drop') %>%
+  ggplot(aes(x = total_trips, y = month, fill = member_casual)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(label = scales::comma(total_trips)),
+            position = position_dodge(width = 0.9),
+            hjust = -0.1, size = 3) +
+  labs(
+    title = "Total Number of Rides by Month and Customer Type",
+    x = "Total Number of Rides",
+    y = "Month",
+    fill = "Customer Type"
+  ) +
+  theme_minimal() +
+  scale_x_continuous(labels = scales::comma)
+```
 
 **Figure 3: Average Ride Duration by Customer Type**
 This bar chart compares the average ride duration for casual riders and members. Casual riders have longer average ride durations (about 25 minutes) compared to members, who typically take shorter, more utilitarian rides (around 13.3 minutes). The graph highlights the difference in trip lengths between leisure and commuting-focused usage.
 
+```{r figure 3, echo=FALSE, fig.cap = "Average Ride Duration by Customer Type", message=FALSE, warning=FALSE}
+
+avg_ride_length <- bike_rides_cleaned %>%
+  group_by(member_casual) %>%
+  summarise(average_duration = mean(ride_length, na.rm = TRUE)) 
+
+ggplot(avg_ride_length, aes(x = member_casual, y = average_duration, fill = member_casual)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +  # Use 'identity' to plot the summarised values
+  labs(
+    title = "Average Ride Length by Customer Type",
+    x = "Customer Type",
+    y = "Average Ride Duration (seconds)"
+  ) +
+  theme_minimal() +  # Clean theme for the plot
+  scale_y_continuous(labels = scales::comma)  # Format y-axis labels with commas for readability
+```
+
 **Figure 4: Hourly Ride Trends**
 This line plot visualises ride frequency throughout the day for both casual riders and members. The chart shows distinct peaks in the morning and evening for members, reflecting typical commuting hours, while casual riders show a more even distribution of trips throughout the day with a peak in the late afternoon. This demonstrates the contrast between the commuting patterns of members and the more flexible ride times of casual riders.
+
+```{r figure 4, echo=FALSE, fig.cap = "Hourly Ride Trends", message=FALSE, warning=FALSE}
+# Step 1: Extract the hour from 'started_at' and create a new column for hour
+bike_rides_cleaned <- bike_rides_cleaned %>%
+  mutate(hour_of_day = hour(started_at))  # Extract hour of the day
+
+# Step 2: Group by hour of day and member type
+ride_summary_by_hour <- bike_rides_cleaned %>%
+  group_by(hour_of_day, member_casual) %>%
+  summarise(number_of_rides = n())  # Count of rides for each hour
+
+# Step 3: Plot the trip frequency by hour as a line graph
+ggplot(ride_summary_by_hour, aes(x = hour_of_day, y = number_of_rides, color = member_casual, group = member_casual)) +
+  geom_line(linewidth = 1) +  # Line graph
+  geom_point(size = 2) +  # Points on the lines for visibility
+  labs(
+    title = "Trip Frequency by Hour for Customer Types",
+    subtitle = "Number of trips by hour for casual members vs members",
+    x = "Hour of the Day",
+    y = "Number of Rides",
+    color = "Customer Type"
+  ) +
+  scale_x_continuous(breaks = 0:23) +  # Ensure every hour is represented on the x-axis
+  scale_y_continuous(labels = label_number(accuracy = 1)) + 
+  theme_minimal()
+
+```
 
 **Figure 5: Day of the Week and Hourly Usage Heatmap**
 This heatmap shows the frequency of rides across different days of the week and hours of the day. It illustrates the concentration of rides during weekdays for members (particularly in the mornings and evenings) and a more even spread throughout the week for casual riders, who do not display distinct peak times. The heatmap further emphasises the more routine usage of bikes by members compared to casual riders.
 
+```{r figure 5, echo=FALSE, fig.cap = "Day of the Week and Hourly Usage Heatmap", message=FALSE, warning=FALSE}
+# Step 1: Extract the day of the week and hour of the day
+bike_rides_cleaned <- bike_rides_cleaned %>%
+  mutate(
+    day_of_week = wday(started_at, label = TRUE, abbr = TRUE),  # Day of week (abbreviated names)
+    hour_of_day = hour(started_at)  # Hour of the day
+  )
+
+# Step 2: Group by member type, day of week, and hour of day
+ride_summary_heatmap <- bike_rides_cleaned %>%
+  group_by(member_casual, day_of_week, hour_of_day) %>%
+  summarise(ride_count = n()) %>%  # Count rides in each group
+  ungroup()
+
+# Step 3: Create the heatmap
+ggplot(ride_summary_heatmap, aes(x = hour_of_day, y = day_of_week, fill = ride_count)) +
+  geom_tile(color = "white") +
+  scale_fill_viridis_c(option = "C", name = "Ride Count") +  # Color scale for the ride frequency
+  facet_wrap(~ member_casual, ncol = 1) +  # Separate heatmaps for each rider type
+  labs(
+    title = "Ride Frequency by Day of the Week and Hour of the Day",
+    subtitle = "Comparing usage patterns for Casual Riders and Members",
+    x = "Hour of the Day",
+    y = "Day of the Week"
+  ) +
+  theme_minimal() +
+  theme(
+    strip.text = element_text(size = 12),  # Increase facet label size for clarity
+    axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate x-axis labels for readability
+  )
+```
+
 **Figure 6: Top 5 Starting Stations**
 This bar chart displays the top 5 starting stations for each customer type. The data highlights the most popular starting points for casual riders and members. Casual riders tend to start their trips from stations near recreational areas, while members often begin their rides from locations closer to commuting routes.
+
+```{r figure 6, echo=FALSE, fig.cap = "Top 5 Starting Stations", message=FALSE, warning=FALSE}
+# Group by customer type and starting station, count trips, filter out empty stations
+top_starting_stations <- bike_rides_cleaned %>%
+  filter(!is.na(start_station_name) & start_station_name != "") %>%  # Filter out NAs and empty strings
+  group_by(member_casual, start_station_name) %>%  # Group by member type and start station
+  summarise(trip_count = n(), .groups = "drop") %>%  # Count the number of trips
+  arrange(desc(trip_count)) %>%  # Sort by trip count in descending order
+  group_by(member_casual) %>%  # Group by member type to ensure top 10 per type
+  top_n(5, trip_count) %>%  # Select top 5 starting stations per customer type
+  ungroup()  # Remove grouping for further processing
+
+
+# Plot the data with labels inside the bars
+ggplot(top_starting_stations, aes(x = reorder(start_station_name, trip_count), y = trip_count, fill = member_casual)) +
+  geom_bar(stat = "identity", position = "dodge") +  # Side-by-side bars for each member type
+  coord_flip() +  # Flip the chart for horizontal bars
+  labs(title = "Top 5 Starting Stations by Customer Type",
+       x = "Starting Station",
+       y = "Number of Rides",
+       fill = "Customer Type") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  # Rotate x-axis text
+  facet_wrap(~ member_casual) +  # Facet by customer type
+  geom_text(aes(label = trip_count), 
+            position = position_dodge(width = 0.8),  # Align text with bars
+            hjust = 1,  # Horizontally center the text inside the bars
+            size = 4)  # Adjust the text size
+```
 
 **Figure 7: Geographic Distribution of Top Starting Stations**
 This map shows the geographic distribution of the top starting stations for casual riders and members. It underscores the different areas frequented by each group: casual riders are concentrated around tourist and leisure locations, while members use stations closer to residential and business districts, indicating different usage patterns for each customer type.
 
+```{r figure 7, echo=FALSE, fig.cap = "Geographic Distribution of Top Starting Stations", message=FALSE, warning=FALSE}
+# Step 1: Calculate top starting stations without including coordinates in the grouping
+top_starting_stations <- bike_rides_cleaned %>%
+  filter(!is.na(start_station_name) & start_station_name != "") %>%
+  group_by(start_station_name, member_casual) %>%
+  summarise(number_of_rides = n(), .groups = "drop") %>%
+  arrange(desc(number_of_rides)) %>%
+  group_by(member_casual) %>%
+  slice_max(number_of_rides, n = 5)  # Select top 5 stations per customer type
+
+# Step 2: Merge coordinates with the top 5 stations using distinct coordinates for each station
+top_starting_stations_coords <- top_starting_stations %>%
+  left_join(
+    bike_rides_cleaned %>%
+      select(start_station_name, start_lat, start_lng) %>%
+      distinct(start_station_name, .keep_all = TRUE), # Ensure unique station coordinates
+    by = "start_station_name"
+  )
+
+# Step 3: Create the Leaflet map with coordinates now reattached
+leaflet(data = top_starting_stations_coords) %>%
+  addTiles() %>%
+  addCircleMarkers(
+    lng = ~start_lng, lat = ~start_lat,
+    radius = ~sqrt(number_of_rides) / 8,  # Adjust radius for visualisation
+    color = ~ifelse(member_casual == "member", "blue", "green"),  # Color by customer type
+    fill = TRUE, fillOpacity = 0.5,
+    popup = ~paste("Station:", start_station_name,
+                   "<br>Customer Type:", member_casual,
+                   "<br>Number of Rides:", number_of_rides)
+  ) %>%
+  addLegend(position = "bottomright", colors = c("blue", "green"),
+            labels = c("Member", "Casual"), title = "Customer Type") %>%
+  setView(lng = mean(top_starting_stations_coords$start_lng, na.rm = TRUE), 
+          lat = mean(top_starting_stations_coords$start_lat, na.rm = TRUE), zoom = 12)
+```
+
 # 9. References
+
+Cheng, J., & Xie, Y. (2021). leaflet: An R Package for Creating Interactive Maps. R package version 2.0.4. Available at: [https://cran.r-project.org/web/packages/leaflet/index.html].
+
+Cyclistic Bike-Share Programme. Data used for analysis in the Cyclistic case study. Available at: [https://divvybikes-marketing-staging.lyft.net/system-data].
+
+Firke, S. (2021). janitor: Simple Tools for Data Cleaning. R package version 2.1.0. Available at: [https://cran.r-project.org/package=janitor].
+
+Grolemund, G., & Wickham, H. (2021). lubridate: An R Package for Working with Dates and Times. R package version 1.8.0. Available at: [https://cran.r-project.org/web/packages/lubridate/index.html].
+
+Wickham, H., & Henry, L. (2021). tidyverse: A Collection of R Packages for Data Manipulation, Visualization, and Analysis. R package version 1.3.1. Available at: [https://cran.r-project.org/web/packages/tidyverse/index.html].
+
+Wickham, H., & Seidel, D. (2021). scales: Scale Functions for Visualization. R package version 1.1.1. Available at: [https://cran.r-project.org/package=scales].

@@ -11,7 +11,7 @@
 
 <meta name="author" content="Danielle Herrington" />
 
-<meta name="date" content="2025-01-05" />
+<meta name="date" content="2025-01-07" />
 
 <title>Data Cleaning</title>
 
@@ -376,7 +376,7 @@ display: none;
 
 <h1 class="title toc-ignore">Data Cleaning</h1>
 <h4 class="author">Danielle Herrington</h4>
-<h4 class="date">2025-01-05</h4>
+<h4 class="date">2025-01-07</h4>
 
 </div>
 
@@ -420,57 +420,28 @@ breakdown of the data cleaning process for this project:</p>
 <h2>1. Install and load necessary packages</h2>
 <p>The first step was to install and load the necessary R packages for
 data cleaning and manipulation.</p>
-<pre class="r"><code># Set the CRAN mirror
-options(repos = c(CRAN = &quot;https://cran.rstudio.com/&quot;))
-
-# Install necessary packages
+<pre class="r"><code># Install necessary packages
 install.packages(&quot;tidyverse&quot;)</code></pre>
 <pre><code>## 
 ## The downloaded binary packages are in
-##  /var/folders/h7/gk5q9s9j2jx59nj597rdwfw00000gn/T//RtmpOVZ4pl/downloaded_packages</code></pre>
+##  /var/folders/h7/gk5q9s9j2jx59nj597rdwfw00000gn/T//RtmphR9c5W/downloaded_packages</code></pre>
 <pre class="r"><code>install.packages(&quot;janitor&quot;)</code></pre>
 <pre><code>## 
 ## The downloaded binary packages are in
-##  /var/folders/h7/gk5q9s9j2jx59nj597rdwfw00000gn/T//RtmpOVZ4pl/downloaded_packages</code></pre>
+##  /var/folders/h7/gk5q9s9j2jx59nj597rdwfw00000gn/T//RtmphR9c5W/downloaded_packages</code></pre>
 <pre class="r"><code>install.packages(&quot;lubridate&quot;)</code></pre>
 <pre><code>## 
 ## The downloaded binary packages are in
-##  /var/folders/h7/gk5q9s9j2jx59nj597rdwfw00000gn/T//RtmpOVZ4pl/downloaded_packages</code></pre>
+##  /var/folders/h7/gk5q9s9j2jx59nj597rdwfw00000gn/T//RtmphR9c5W/downloaded_packages</code></pre>
 <pre class="r"><code>install.packages(&quot;scales&quot;)</code></pre>
 <pre><code>## 
 ## The downloaded binary packages are in
-##  /var/folders/h7/gk5q9s9j2jx59nj597rdwfw00000gn/T//RtmpOVZ4pl/downloaded_packages</code></pre>
+##  /var/folders/h7/gk5q9s9j2jx59nj597rdwfw00000gn/T//RtmphR9c5W/downloaded_packages</code></pre>
 <pre class="r"><code># Load the packages
-library(tidyverse)  # includes core packages like ggplot2 and readr which are helpful to wrangle data</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-## ✔ purrr     1.0.2     
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<pre class="r"><code>library(janitor)    # contains functions that help with data cleaning</code></pre>
-<pre><code>## 
-## Attaching package: &#39;janitor&#39;
-## 
-## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     chisq.test, fisher.test</code></pre>
-<pre class="r"><code>library(lubridate)  # helps wrangle date attributes
+library(tidyverse)  # includes core packages like ggplot2 and readr which are helpful to wrangle data
+library(janitor)    # contains functions that help with data cleaning
+library(lubridate)  # helps wrangle date attributes
 library(scales)     # useful for customising the appearance of visualisations</code></pre>
-<pre><code>## 
-## Attaching package: &#39;scales&#39;
-## 
-## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     discard
-## 
-## The following object is masked from &#39;package:readr&#39;:
-## 
-##     col_factor</code></pre>
 </div>
 <div id="load-the-data" class="section level2">
 <h2>2. Load the data</h2>
@@ -478,18 +449,18 @@ library(scales)     # useful for customising the appearance of visualisations</c
 analysis using the read.csv() function, which ensured proper handling of
 file paths and delimiters.</p>
 <pre class="r"><code># Import last 12 months of data
-nov23 &lt;- read.csv(&quot;~/Documents/Cyclistic/Data/202311-divvy-tripdata.csv&quot;)
-dec23 &lt;- read.csv(&quot;~/Documents/Cyclistic/Data/202312-divvy-tripdata.csv&quot;)
-jan24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Data/202401-divvy-tripdata.csv&quot;)
-feb24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Data/202402-divvy-tripdata.csv&quot;)
-mar24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Data/202403-divvy-tripdata.csv&quot;)
-apr24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Data/202404-divvy-tripdata.csv&quot;)
-may24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Data/202405-divvy-tripdata.csv&quot;)
-jun24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Data/202406-divvy-tripdata.csv&quot;)
-jul24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Data/202407-divvy-tripdata.csv&quot;)
-aug24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Data/202408-divvy-tripdata.csv&quot;)
-sep24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Data/202409-divvy-tripdata.csv&quot;)
-oct24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Data/202410-divvy-tripdata.csv&quot;)</code></pre>
+nov23 &lt;- read.csv(&quot;~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202311-divvy-tripdata.csv&quot;)
+dec23 &lt;- read.csv(&quot;~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202312-divvy-tripdata.csv&quot;)
+jan24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202401-divvy-tripdata.csv&quot;)
+feb24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202402-divvy-tripdata.csv&quot;)
+mar24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202403-divvy-tripdata.csv&quot;)
+apr24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202404-divvy-tripdata.csv&quot;)
+may24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202405-divvy-tripdata.csv&quot;)
+jun24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202406-divvy-tripdata.csv&quot;)
+jul24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202407-divvy-tripdata.csv&quot;)
+aug24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202408-divvy-tripdata.csv&quot;)
+sep24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202409-divvy-tripdata.csv&quot;)
+oct24 &lt;- read.csv(&quot;~/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/202410-divvy-tripdata.csv&quot;)</code></pre>
 </div>
 <div id="inspect-the-data" class="section level2">
 <h2>3. Inspect the data</h2>
@@ -757,7 +728,10 @@ str(nov23)</code></pre>
 across all data frames, the 12 monthly data frames were combined into
 one consolidated data frame.</p>
 <pre class="r"><code># Combine 12 data frames into one data frame
-bike_rides &lt;- rbind(nov23,dec23,jan24,feb24,mar24,apr24,may24,jun24,jul24,aug24,sep24,oct24)</code></pre>
+bike_rides &lt;- rbind(nov23,dec23,jan24,feb24,mar24,apr24,may24,jun24,jul24,aug24,sep24,oct24)
+
+# Save the combined dataframe as a CSV file
+write.csv(bike_rides, &quot;/Users/danielleherrington/Documents/Cyclistic/Cyclistic Case Study 2/cyclistic-project/data/bike_rides.csv&quot;, row.names = FALSE)</code></pre>
 </div>
 <div id="initial-inspection-of-the-combined-data-frame" class="section level2">
 <h2>5. Initial inspection of the combined data frame</h2>
