@@ -70,7 +70,7 @@ Through data analysis and visualisation, this report will address questions such
 
 ## A.	Description of Data
 
-For this report, Cyclistic's historical bike trip data will be analysed to uncover trends. This report makes use of data provided by Motivate International Inc. under this [licence](https://divvybikes.com/data-license-agreement) specifying usage rights and restrictions, located in a series of .CSV files made publicly available on the cloud storage platform Amazon Web Service (AWS). The AWS infrastructure provides a secure, remote backup that protects against data loss due to physical damage, theft, or localised incidents affecting the primary storage. 
+For this report, Cyclistic's historical bike trip data will be analysed to uncover trends. This report makes use of data provided by Motivate International Inc. under this [license](https://divvybikes.com/data-license-agreement) specifying usage rights and restrictions, located in a series of .CSV files made publicly available on the cloud storage platform Amazon Web Service (AWS). The AWS infrastructure provides a secure, remote backup that protects against data loss due to physical damage, theft, or localised incidents affecting the primary storage. 
 
 A total of 55 datasets are available, spanning from April 2020 to October 2024. Each dataset is in CSV (comma-separated values) format and includes detailed records of every ride taken by Cyclistic customers. For this project, however, only data from the most recent twelve months—November 2023 through October 2024—will be utilised. 12 .CSV files in total were downloaded and stored locally for the next steps in the process. The .CSV file format is a highly accessible data format due to its simplicity, compatibility, and ease of use.
 
@@ -138,34 +138,34 @@ In this analysis, all data processing, analysis, and visualisation were conducte
 
 The data cleaning process was a critical step in preparing the Cylistic data for analysis. The steps below outline the approach taken to ensure the data was accurate, consistent, and ready for transformation:
 
-**Initial Inspection**
+**1. Initial Inspection**
 
 - Examined discrepancies in column names and data types (e.g., dbl, chr, date) across the 12 monthly data frames to ensure consistency before merging.
 
-**Combining Data Frames**
+**2. Combining Data Frames**
 
 - Merged the 12 monthly data frames into a single consolidated data frame for streamlined analysis.
 
-**Overview of Combined Data**
+**3. Overview of Combined Data**
 
 - Used the glimpse() function to assess the structure and dimensions of the combined dataset, including column types and sample data.
 
-**Removing Empty Rows and Columns**
+**4. Removing Empty Rows and Columns**
 
 - Identified and removed rows and columns containing only missing values to ensure the dataset was clean and complete.
 
-**Handling Duplicates**
+**5. Handling Duplicates**
 
 -	Inspected the ride_id column for duplicate entries, which serve as unique identifiers for each ride.
 -	Removed duplicate rows, keeping only the first occurrence of each entry.
 -	Verified the dataset to confirm no duplicates remained.
 
-**Validating Data Integrity**
+**6. Validating Data Integrity**
 
 -	Checked the dimensions of the cleaned dataset to confirm the successful removal of unnecessary rows, columns, and duplicates.
 -	Validated the member_casual column to ensure it contained only the two expected categories: "casual" and "member."
 
-This cleaning process ensured that the dataset was reliable and ready for the transformation stage. For a detailed view of the code used, refer to the [accompanying documentation].
+This cleaning process ensured that the dataset was reliable and ready for the transformation stage. For a detailed view of the code used, refer to the [accompanying documentation](https://danielleherrington.github.io/cyclistic-project/rmarkdown/data_cleaning.html).
 
 
 ### Data Transformation 
@@ -190,7 +190,7 @@ The dataset was inspected for negative ride lengths, which can indicate issues s
 **6.	Final Verification**
 The updated data structure was reviewed, and the first few rows of the transformed data were displayed to verify the successful addition of new columns and the removal of anomalies.
 
-These transformations ensured that the dataset was enriched with meaningful variables and prepared for effective analysis. The structured and cleaned data is now ready to reveal insights about Cyclistic's rider behaviours. To view the complete code for these transformations, [click here].
+These transformations ensured that the dataset was enriched with meaningful variables and prepared for effective analysis. The structured and cleaned data is now ready to reveal insights about Cyclistic's rider behaviours. To view the complete code for these transformations, [click here](https://danielleherrington.github.io/cyclistic-project/rmarkdown/data_transformation.html).
 
 
 # 4. Exploratory Data Analysis (EDA)
@@ -201,7 +201,8 @@ The aim of the Exploratory Data Analysis (EDA) is to explore the dataset and ext
 
 For visualisations referenced throughout the analysis, please refer to the **Appendices** for all figures.
 
-For a breakdown of the code used to generate the visualisations in this report, [click here](rmarkdown/data_analysis.html).
+For a breakdown of the code used to generate the visualisations in this report, [click here](https://danielleherrington.github.io/cyclistic-project/rmarkdown/data_analysis.html
+).
 
 ### Key Findings
 

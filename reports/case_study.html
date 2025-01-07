@@ -4544,7 +4544,7 @@ membership growth.</p>
 <h2>A. Description of Data</h2>
 <p>For this report, Cyclistic’s historical bike trip data will be
 analysed to uncover trends. This report makes use of data provided by
-Motivate International Inc. under this <a href="https://divvybikes.com/data-license-agreement">licence</a>
+Motivate International Inc. under this <a href="https://divvybikes.com/data-license-agreement">license</a>
 specifying usage rights and restrictions, located in a series of .CSV
 files made publicly available on the cloud storage platform Amazon Web
 Service (AWS). The AWS infrastructure provides a secure, remote backup
@@ -4640,28 +4640,28 @@ for visualising geographic data.</p>
 Cylistic data for analysis. The steps below outline the approach taken
 to ensure the data was accurate, consistent, and ready for
 transformation:</p>
-<p><strong>Initial Inspection</strong></p>
+<p><strong>1. Initial Inspection</strong></p>
 <ul>
 <li>Examined discrepancies in column names and data types (e.g., dbl,
 chr, date) across the 12 monthly data frames to ensure consistency
 before merging.</li>
 </ul>
-<p><strong>Combining Data Frames</strong></p>
+<p><strong>2. Combining Data Frames</strong></p>
 <ul>
 <li>Merged the 12 monthly data frames into a single consolidated data
 frame for streamlined analysis.</li>
 </ul>
-<p><strong>Overview of Combined Data</strong></p>
+<p><strong>3. Overview of Combined Data</strong></p>
 <ul>
 <li>Used the glimpse() function to assess the structure and dimensions
 of the combined dataset, including column types and sample data.</li>
 </ul>
-<p><strong>Removing Empty Rows and Columns</strong></p>
+<p><strong>4. Removing Empty Rows and Columns</strong></p>
 <ul>
 <li>Identified and removed rows and columns containing only missing
 values to ensure the dataset was clean and complete.</li>
 </ul>
-<p><strong>Handling Duplicates</strong></p>
+<p><strong>5. Handling Duplicates</strong></p>
 <ul>
 <li>Inspected the ride_id column for duplicate entries, which serve as
 unique identifiers for each ride.</li>
@@ -4669,7 +4669,7 @@ unique identifiers for each ride.</li>
 entry.</li>
 <li>Verified the dataset to confirm no duplicates remained.</li>
 </ul>
-<p><strong>Validating Data Integrity</strong></p>
+<p><strong>6. Validating Data Integrity</strong></p>
 <ul>
 <li>Checked the dimensions of the cleaned dataset to confirm the
 successful removal of unnecessary rows, columns, and duplicates.</li>
@@ -4678,7 +4678,8 @@ two expected categories: “casual” and “member.”</li>
 </ul>
 <p>This cleaning process ensured that the dataset was reliable and ready
 for the transformation stage. For a detailed view of the code used,
-refer to the [accompanying documentation].</p>
+refer to the <a href="https://danielleherrington.github.io/cyclistic-project/rmarkdown/data_cleaning.html">accompanying
+documentation</a>.</p>
 </div>
 <div id="data-transformation" class="section level3">
 <h3>Data Transformation</h3>
@@ -4722,8 +4723,8 @@ anomalies.</p>
 <p>These transformations ensured that the dataset was enriched with
 meaningful variables and prepared for effective analysis. The structured
 and cleaned data is now ready to reveal insights about Cyclistic’s rider
-behaviours. To view the complete code for these transformations, [click
-here].</p>
+behaviours. To view the complete code for these transformations, <a href="https://danielleherrington.github.io/cyclistic-project/rmarkdown/data_transformation.html">click
+here</a>.</p>
 </div>
 </div>
 </div>
@@ -4740,7 +4741,8 @@ and hour—and identify usage trends for each customer type.</p>
 <p>For visualisations referenced throughout the analysis, please refer
 to the <strong>Appendices</strong> for all figures.</p>
 <p>For a breakdown of the code used to generate the visualisations in
-this report, <a href="rmarkdown/data_analysis.html">click here</a>.</p>
+this report, <a href="https://danielleherrington.github.io/cyclistic-project/rmarkdown/data_analysis.html">click
+here</a>.</p>
 </div>
 <div id="key-findings" class="section level3">
 <h3>Key Findings</h3>
@@ -5212,8 +5214,8 @@ around tourist and leisure locations, while members use stations closer
 to residential and business districts, indicating different usage
 patterns for each customer type.</p>
 <div class="figure">
-<div class="leaflet html-widget html-fill-item" id="htmlwidget-9fe75b77e56fce53ca1e" style="width:576px;height:384px;"></div>
-<script type="application/json" data-for="htmlwidget-9fe75b77e56fce53ca1e">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addCircleMarkers","args":[[41.892278,41.880958,41.90096039,41.911722,41.8811015,41.889198184,41.88338,41.8827519656856,41.902686,41.912133],[-87.612043,-87.616743,-87.62377664,-87.62680400000001,-87.62408183333331,-87.638509274,-87.64117,-87.64119029045099,-87.6316553333333,-87.63465600000001],[28.2082102409919,23.10472083795863,19.86084401529804,18.99794396770345,18.82858531594979,21.40677462860765,21.07279051288652,19.81082406160834,19.72308292331602,18.1142209327368],null,null,{"interactive":true,"className":"","stroke":true,"color":["green","green","green","green","green","blue","blue","blue","blue","blue"],"weight":5,"opacity":0.5,"fill":true,"fillColor":["green","green","green","green","green","blue","blue","blue","blue","blue"],"fillOpacity":0.5},null,null,["Station: Streeter Dr & Grand Ave <br>Customer Type: casual <br>Number of Rides: 50925","Station: DuSable Lake Shore Dr & Monroe St <br>Customer Type: casual <br>Number of Rides: 34165","Station: Michigan Ave & Oak St <br>Customer Type: casual <br>Number of Rides: 25245","Station: DuSable Lake Shore Dr & North Blvd <br>Customer Type: casual <br>Number of Rides: 23099","Station: Millennium Park <br>Customer Type: casual <br>Number of Rides: 22689","Station: Kingsbury St & Kinzie St <br>Customer Type: member <br>Number of Rides: 29328","Station: Clinton St & Washington Blvd <br>Customer Type: member <br>Number of Rides: 28420","Station: Clinton St & Madison St <br>Customer Type: member <br>Number of Rides: 25118","Station: Clark St & Elm St <br>Customer Type: member <br>Number of Rides: 24896","Station: Wells St & Concord Ln <br>Customer Type: member <br>Number of Rides: 21000"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLegend","args":[{"colors":["blue","green"],"labels":["Member","Casual"],"na_color":null,"na_label":"NA","opacity":0.5,"position":"bottomright","type":"unknown","title":"Customer Type","extra":null,"layerId":null,"className":"info legend","group":null}]}],"limits":{"lat":[41.880958,41.912133],"lng":[-87.64119029045099,-87.612043]},"setView":[[41.89371690396856,-87.62906293711177],12,[]]},"evals":[],"jsHooks":[]}</script>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-8ded3c60da36827893fe" style="width:576px;height:384px;"></div>
+<script type="application/json" data-for="htmlwidget-8ded3c60da36827893fe">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addCircleMarkers","args":[[41.892278,41.880958,41.90096039,41.911722,41.8811015,41.889198184,41.88338,41.8827519656856,41.902686,41.912133],[-87.612043,-87.616743,-87.62377664,-87.62680400000001,-87.62408183333331,-87.638509274,-87.64117,-87.64119029045099,-87.6316553333333,-87.63465600000001],[28.2082102409919,23.10472083795863,19.86084401529804,18.99794396770345,18.82858531594979,21.40677462860765,21.07279051288652,19.81082406160834,19.72308292331602,18.1142209327368],null,null,{"interactive":true,"className":"","stroke":true,"color":["green","green","green","green","green","blue","blue","blue","blue","blue"],"weight":5,"opacity":0.5,"fill":true,"fillColor":["green","green","green","green","green","blue","blue","blue","blue","blue"],"fillOpacity":0.5},null,null,["Station: Streeter Dr & Grand Ave <br>Customer Type: casual <br>Number of Rides: 50925","Station: DuSable Lake Shore Dr & Monroe St <br>Customer Type: casual <br>Number of Rides: 34165","Station: Michigan Ave & Oak St <br>Customer Type: casual <br>Number of Rides: 25245","Station: DuSable Lake Shore Dr & North Blvd <br>Customer Type: casual <br>Number of Rides: 23099","Station: Millennium Park <br>Customer Type: casual <br>Number of Rides: 22689","Station: Kingsbury St & Kinzie St <br>Customer Type: member <br>Number of Rides: 29328","Station: Clinton St & Washington Blvd <br>Customer Type: member <br>Number of Rides: 28420","Station: Clinton St & Madison St <br>Customer Type: member <br>Number of Rides: 25118","Station: Clark St & Elm St <br>Customer Type: member <br>Number of Rides: 24896","Station: Wells St & Concord Ln <br>Customer Type: member <br>Number of Rides: 21000"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLegend","args":[{"colors":["blue","green"],"labels":["Member","Casual"],"na_color":null,"na_label":"NA","opacity":0.5,"position":"bottomright","type":"unknown","title":"Customer Type","extra":null,"layerId":null,"className":"info legend","group":null}]}],"limits":{"lat":[41.880958,41.912133],"lng":[-87.64119029045099,-87.612043]},"setView":[[41.89371690396856,-87.62906293711177],12,[]]},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Geographic Distribution of Top Starting Stations
 </p>
